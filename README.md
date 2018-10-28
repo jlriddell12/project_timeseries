@@ -24,13 +24,13 @@ When using a cosine model or fourier series to model changeds in a parameter ove
 must be represented as number that is a fraction of the period in question. For example, if the
 equations are being used to model changes over a twenty-four period then each time must be a 
 number as a fraction of 24 hours. The objective to this project is to write a bash script that:
-1. converts all time to fraction of the period in question; 
-2. performs the cosine mathematical model and outputs the results in column ammended to the table
-3. can be written as a loop to reiterate the process over however many parameters or sites the user selects.
-4. execute the script using R-studio so that the built in statistical packages in R can compare
-the model results to the data; and,
-5. use ggplot to output the results to a graph(s) that represent the raw data, modeled data, and
+1. Write a function(s) in R that will:
+  * converts all time to fraction of the period in question (_I think this will be easier in R_)
+  * performs the cosine mathematical model and outputs the results in column ammended to the table
+  * can be written as a loop to reiterate the process over however many parameters or sites the user selects.
+  * use ggplot to output the results to a graph(s) that represent the raw data, modeled data, and
 statistical analysis.
+2. Script could be executed from bash such that it can loop over files or sites or variables.
 
 3. Data Source
 This project will use temperature data collected from a series of springs in Monroe County West
@@ -58,15 +58,15 @@ results, and statistical comparison (likely an f-test) of the model to the data.
 or plots will show the results of multiple springs in a watershed for easy comparison and discussion.
 The bash script to maniuplate the date should be able to be easily changed for daily, monthly, or 
 yearly analysis. Again, packages may exist in R to bypass this step, however, it could be useful 
-for different types of analysis.
+for different types of analysis. _You might need to explain this bit to me.  Aggregate in R will allow you to aggregate easily at different time steps_
 
 6. Questions for instructor (informal)
 a) I'm thinking I need to use bash and R to achieve this but it may be possible to do it all in R?
-What are your thoughts?
+What are your thoughts? _Start in R and see if there is a way to loop over files in bash_
 b) I know we haven't covered ggplot and that you are more partial to base R but I find ggplot's 
 ability to combine multiple graphs useful for this sort of comparison. That being said I haven't
  worked in base-R plotting as much. Do you think I should plotting in both to see which
-is more effective?
+is more effective? _Yes, feel free to use either.  Whichever works better for the types of plots you wnat to make.  Base R is more customizable, but ggplot can be faster for plotting lots of sites/stations/samples etc._
 c) I'm sure I'll think of other questions as I progress. 
 
  
