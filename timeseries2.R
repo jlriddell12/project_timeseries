@@ -18,7 +18,7 @@ sheets <- excel_sheets("data/GMILL.xlsx")
 
 #Write loop to read in each indvidual sheet, eliminate empty rows, and ouput each indvidual sheet.
   for(sheet_name in sheets){
-    GMILL <- read_excel("data/GMILL.xlsx", sheet = sheet_name)[,1:3]
+    GMILL <- read_excel("data/GMILL.xlsx", sheet = sheet_name)[,1:3] #note that warnings will appear notifying user of gaps in data, the next line remedies that.
     GMILL_sheet_name <- GMILL[complete.cases(GMILL), ]                                                                                                 
     assign(paste0("S", sheet_name), GMILL_sheet_name)
   }
