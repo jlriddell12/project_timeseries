@@ -44,7 +44,7 @@ GMILL$TempModel <- TempModel
 summary(GMILL_temp)
 
 #Plot results
-plot(GMILL$`Date-Time`,GMILL$TempC, cex =.25, main = "Cosine Model of Temperature at Gap Mills", ylab = "Temp, C", xlab = "Year")
+#plot(GMILL$`Date-Time`,GMILL$TempC, cex =.25, main = "Cosine Model of Temperature at Gap Mills", ylab = "Temp, C", xlab = "Year")
 
 #Plot results 2
   ggplot(GMILL, aes(x=GMILL$'Date-Time', y=TempModel))+

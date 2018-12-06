@@ -6,6 +6,7 @@ library("tidyverse")
 library("readxl")
 library("car")
 library("ggplot2")
+library("dplyr")
 
 #List all files and make a test data frame
 files <- list.files("./data")
@@ -26,6 +27,9 @@ for (file_name in files){
     temp <- lm(TempC ~ sin(2*pi*time_calc) + cos(2*pi*time_calc),data=data_comp)
     TempModel <- temp$fitted.values
     data_comp$TempModel <- TempModel
+    source("project_timeseries/ggplot_function.R")
+    test_plot <- apply(data_comp, 2, cosine_plot)
+    #assign(paste0(file_name), test)
     test <- rbind(test, data_comp)
     assign(paste0(file_name), test)
   }
