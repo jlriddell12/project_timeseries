@@ -15,7 +15,7 @@ HATCH <- read_xlsx("data/HATCH.xlsx")
 sheets <- excel_sheets("data/HATCH.xlsx")
 test <-setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("Date_Time", "TempF", "TempC"))
 
-#Write loop to read in each indvidual sheet, eliminate empty rows, and ouput each indvidual sheet.
+#Write loop to read in each indvidual sheet, eliminate empty rows, and statistics, bind sheets.
   for(sheet_name in sheets){
     HATCH <- read_excel("data/HATCH.xlsx", sheet = sheet_name)[,1:3] #note that warnings will appear notifying user of gaps in data, the next line remedies that.
     data_comp <- HATCH[complete.cases(HATCH), ] 
