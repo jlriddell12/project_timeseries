@@ -1,3 +1,5 @@
+#ONE SITE ONLY
+
 #Begin by clearing the environment
 rm(list=ls())
 
@@ -7,25 +9,38 @@ library("readxl")
 library("car")
 library("ggplot2")
 
-#Read in data. Eventually this will be a loop for 4 files in a data folder.
+#Read in data
 
-GMILL <- read_xlsx("data/GMILL.xlsx")
-sheets <- excel_sheets("data/GMILL.xlsx")
-
-#What I want my first loop to do for each year, that is 2015, 2016, 2017, 2018
-#GMILL <- read_xlsx("data/GMILL.xlsx")[,1:3]
-#GMILL_2015 <- GMILL[complete.cases(GMILL), ]
+HATCH <- read_xlsx("data/HATCH.xlsx")
+sheets <- excel_sheets("data/HATCH.xlsx")
+test <-setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("Date_Time", "TempF", "TempC"))
 
 #Write loop to read in each indvidual sheet, eliminate empty rows, and ouput each indvidual sheet.
   for(sheet_name in sheets){
-    GMILL <- read_excel("data/GMILL.xlsx", sheet = sheet_name)[,1:3] #note that warnings will appear notifying user of gaps in data, the next line remedies that.
-    GMILL_sheet_name <- GMILL[complete.cases(GMILL), ]                                                                                                 
-    assign(paste0("S", sheet_name), GMILL_sheet_name)
+    HATCH <- read_excel("data/HATCH.xlsx", sheet = sheet_name)[,1:3] #note that warnings will appear notifying user of gaps in data, the next line remedies that.
+    data_comp <- HATCH[complete.cases(HATCH), ] 
+    t1 <- as.POSIXct(strptime(data_comp$`Date-Time`, "%Y-%m-%d %H:%M:%S"))
+    t2 <- julian(t1, origin = "2015-01-01 00:00:00")
+    t3 <- t2/365.25
+    time_calc <- as.numeric(t3)
+    data_comp$time_calc <- time_calc
+    temp <- lm(TempC ~ sin(2*pi*time_calc) + cos(2*pi*time_calc),data=data_comp)
+    TempModel <- temp$fitted.values
+    data_comp$TempModel <- TempModel
+    test <- rbind(test, data_comp)
+    assign(paste0("Hatch"), test)
   }
+source("ggplot_function.R")
+cosine_plot(Hatch)
  
-#Bind each sheet together
-GMILL <- rbind(S2015, S2016, S2017, S2018)
 
+
+
+
+
+
+
+#Notes explaining each step
 #Convert 'Date-Time' column to a fraction of year if 0 years = Jan 1, 2015.
 t1 <- as.POSIXct(strptime(GMILL$`Date-Time`, "%Y-%m-%d %H:%M:%S"))
 t2 <- julian(t1, origin = "2015-01-01 00:00:00")
