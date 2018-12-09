@@ -7,10 +7,10 @@ library("readxl")
 library("car")
 library("ggplot2")
 library("dplyr")
+source("ggplot_function.R")
 
 #List all files and make a test data frame
 files <- list.files("./data")
-#test <-setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("Date_Time", "TempF", "TempC"))
 
 for (file_name in files){
   test <-setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("Date_Time", "TempF", "TempC"))
@@ -26,31 +26,18 @@ for (file_name in files){
     time_calc <- as.numeric(t3)
     data_comp$time_calc <- time_calc
     temp <- lm(TempC ~ sin(2*pi*time_calc) + cos(2*pi*time_calc),data=data_comp)
-    summary(temp)
+    #summary(temp)
     TempModel <- temp$fitted.values
     data_comp$TempModel <- TempModel
     test <- rbind(test, data_comp)
-    assign(paste0(file_name), test)
-    #source("ggplot_function.R")
-    #cosine_plot(file_name)
+    assign(paste0(file_name,"2"), test)
+    data_frame_list = (grep("\\w+\\.+\\w+2", ls(), value = TRUE))
   }
 }
-
-
-for (file_name in files){
-  ggplot(file_name, aes(x=file_name$'Date-Time', y=TempModel))+
-    geom_line(col="red",lwd=0.5)+
-    geom_point(aes(y=pH), size=2.5)+
-    ggtitle("Temperature Model")+
-    theme(plot.title = element_text(hjust = 0.5))+
-    labs(x="Year", y="Temperature, C")
+      for (file in data_frame_list){
+      cosine_plot(get(file))
 }
 
-
-cosine_plot(GMILL.xlsx)
-cosine_plot(HANCK.xlsx)
-cosine_plot(HATCH.xlsx)
-cosine_plot(OLSON.xlsx)
 
 
 #Before moving forward, remove some unecessary stuff from the environment. These files were created in order to execute the loop but now they are unneeded.
