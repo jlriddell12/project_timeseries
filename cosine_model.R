@@ -26,18 +26,29 @@ for (file_name in files){
     time_calc <- as.numeric(t3)
     data_comp$time_calc <- time_calc
     temp <- lm(TempC ~ sin(2*pi*time_calc) + cos(2*pi*time_calc),data=data_comp)
-    #summary(temp)
+    summary(temp)
     TempModel <- temp$fitted.values
     data_comp$TempModel <- TempModel
     test <- rbind(test, data_comp)
     assign(paste0(file_name,"2"), test)
-    data_frame_list = (grep("\\w+\\.+\\w+2", ls(), value = TRUE))
+    plot_list = (grep("\\w+\\.+\\w+2", ls(), value = TRUE))
+    
+    for (file in plot_list){
+    cosine_plot(get(file))
+    }
   }
 }
-      for (file in data_frame_list){
-      cosine_plot(get(file))
-}
 
+
+cosine_plot <- function(file){
+  testplot <- print(ggplot(file, aes(x=file$'Date-Time', y=TempModel))+
+                      geom_line(col="red",lwd=0.5)+
+                      geom_point(aes(y=TempC), size=0.5)+
+                      ggtitle("Temperature Model")+
+                      theme(plot.title = element_text(hjust = 0.5))+
+                      labs(x="Year", y="Temp C"))
+  return(testplot)
+}
 
 
 #Before moving forward, remove some unecessary stuff from the environment. These files were created in order to execute the loop but now they are unneeded.
