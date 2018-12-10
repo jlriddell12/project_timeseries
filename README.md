@@ -1,4 +1,47 @@
-# project_timeseries
+# Fitting a Cosine Model to Long Term Temperature Data
+
+## Included 
+- Project rationale and objectives
+- Explanation of cosine model
+- Getting started and description of data
+- Example code 
+- Potential challenges and tips
+- Future work
+
+## Project rationale and objectives
+Temperature data of springs is an integral parameter in understanding spring connection to surface inputs. However, long-term temperature collection results in large data sets that often have gaps and inconsistent time-stamps; because of this, traditional time-series evaluation of data cannot be completed unless data are synthesized to fill in gaps and create evenly spaced data. Recently, researchers have begun to apply cosine models and fourier series to long-term temperature data as these models can predict values at a given time regardless of data spacing or gaps. Spring temperature data is expected to follow a sine or cosine type curve based on seasonal fluctuations of rainfall temperature - the similarities of the cosine model of spring temperature to the cosine model of rainfall temperature is indicative of the spring's connection to surface inputs.
+
+The objective of the following code is to complete the first and most time consuming portion of the previously described technique: 
+ *Combine excel files that have multiple sheets of data for one spring into single data frames; for the data here, each sheet represents one year of data. The combination of the data into one sheet allows the model to evaluate all of the data together.
+ *Calculate a linear of model of temperature based on time using a fourier series and append a vector of predicted values to the dataframes.
+ *Write a plotting function using ggplot2 that will graph the colleted temperature points and predicted values across a series of dataframes.
+
+## Explanation of cosine model
+
+## Getting started and description of data
+If using this code as an example, download the files in the data folder to the working directory that will be used or R project. Next, install the necessary packages (note: be sure that the most recent version of R is being used so that packages like tidyverse and ggplot2 will be compatible with R).
+
+          install.packages("tidyverse")
+          install.packages("readxl")
+          install.packages("car") 
+          install.packages("ggplot2")
+          install.packages("dplyr")
+
+ 
+The collection of long-term temperature data in springs is a common yet
+integral technique in understanding spring connection to surface inputs. However,
+temperature collection often results in large data sets that are difficult to manage and
+characterize. Traditional time-series analyses require no data-gaps and for data to be 
+evenly spaced; when data-gaps are present the research is forced to synthesize data which
+may result in misinterpreted relationships of springs to surface connection. Recently, 
+researchers have begun to apply cosine models and fourier series to model cyclical 
+data (daily, seasonally, and yearly) as long as the parameter in question
+has consistent maximum and minimum values. Cosine and fourier series are more robust when it 
+comes to missing data and data collected at uneven intervals as the model can still fit data
+whether these conditions are met or not. The current techniques for cosine and fourier 
+series modeling involve lengthy data manipulation and calculations (typically doen in Excel); 
+followed by statistical analysis to compare the modeled outcome to the raw data. Finally, these
+results must be represented in some form of graph or figure that requires even further manipulation.
 Jill Riddell
 October 26, 2018
 ESDA
