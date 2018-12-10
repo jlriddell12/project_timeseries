@@ -27,7 +27,8 @@ If using this code as an example, download the files in the data folder to the w
           install.packages("ggplot2")
           install.packages("dplyr")
 
- 
+The data in the data folder represents temperature data from three springs in Monroe County, WV (GMILL, HATCH, and OLSON) collected from late 2015 through early 2018.
+
 The collection of long-term temperature data in springs is a common yet
 integral technique in understanding spring connection to surface inputs. However,
 temperature collection often results in large data sets that are difficult to manage and
