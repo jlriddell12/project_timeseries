@@ -12,9 +12,9 @@
 Temperature data of springs is an integral parameter in understanding spring connection to surface inputs. However, long-term temperature collection results in large data sets that often have gaps and inconsistent time-stamps; because of this, traditional time-series evaluation of data cannot be completed unless data are synthesized to fill in gaps and create evenly spaced data. Recently, researchers have begun to apply cosine models and fourier series to long-term temperature data as these models can predict values at a given time regardless of data spacing or gaps. Spring temperature data is expected to follow a sine or cosine type curve based on seasonal fluctuations of rainfall temperature - the similarities of the cosine model of spring temperature to the cosine model of rainfall temperature is indicative of the spring's connection to surface inputs.
 
 The objective of the following code is to complete the first and most time consuming portion of the previously described technique: 
- *Combine excel files that have multiple sheets of data for one spring into single data frames; for the data here, each sheet represents one year of data. The combination of the data into one sheet allows the model to evaluate all of the data together.
- *Calculate a linear of model of temperature based on time using a fourier series and append a vector of predicted values to the dataframes.
- *Write a plotting function using ggplot2 that will graph the colleted temperature points and predicted values across a series of dataframes.
+ 1. Combine excel files that have multiple sheets of data for one spring into single data frames; for the data here, each sheet represents one year of data. The combination of the data into one sheet allows the model to evaluate all of the data together.
+ 1. Calculate a linear of model of temperature based on time using a fourier series and append a vector of predicted values to the dataframes.
+ 1. Write a plotting function using ggplot2 that will graph the colleted temperature points and predicted values across a series of dataframes.
 
 ## Explanation of cosine model
 
