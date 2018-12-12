@@ -7,54 +7,43 @@ library("readxl")
 library("car")
 library("ggplot2")
 library("dplyr")
-source("ggplot_function.R")
 
-#List all files and make a test data frame
+#Source the plotting function
+source("functions/ggplot_function.R")
+
+#Create a vector of files of interest
 files <- list.files("./data")
 
+#Loop to read in files and sheets
 for (file_name in files){
-  test <-setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("Date_Time", "TempF", "TempC"))
-  data_s <- read_excel(paste0("data/", file_name))[,1:3]
-  sheets <- excel_sheets(paste0("data/", file_name))
-  
+  test <-setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("Date_Time", "TempF", "TempC")) #creates an empty data frame that works as a template that can be filled in with data that will be read in 
+  data_s <- read_excel(paste0("data/", file_name))[,1:3] #reads in first 3 columns of files. Note that temperature fahrenheit and temperature celsius are read in. The following analyses address celsius but users can adjust to use fahrenheit
+  sheets <- excel_sheets(paste0("data/", file_name)) #Create a vector list of sheets for each file. Files consist of a series of sheets that represent a certain year of data.
+
+#Loop to eliminate empty rows in sheets; adjust time to a number; use fourier series analysis; and ammend values to data frames  
   for (sheet_name in sheets){
-    data_s <- read_excel(paste0("data/", file_name), sheet = sheet_name)[,1:3] #note that warnings will appear notifying user of gaps in data, the next line remedies that.
-    data_comp <- data_s[complete.cases(data_s), ]
-    t1 <- as.POSIXct(strptime(data_comp$`Date-Time`, "%Y-%m-%d %H:%M:%S"))
-    t2 <- julian(t1, origin = "2015-01-01 00:00:00")
-    t3 <- t2/365.25
-    time_calc <- as.numeric(t3)
-    data_comp$time_calc <- time_calc
-    temp <- lm(TempC ~ sin(2*pi*time_calc) + cos(2*pi*time_calc),data=data_comp)
-    summary(temp)
-    TempModel <- temp$fitted.values
-    data_comp$TempModel <- TempModel
-    test <- rbind(test, data_comp)
-    assign(paste0(file_name,"2"), test)
-    plot_list = (grep("\\w+\\.+\\w+2", ls(), value = TRUE))
-    
-    for (file in plot_list){
-    cosine_plot(get(file))
-    }
+    data_s <- read_excel(paste0("data/", file_name), sheet = sheet_name)[,1:3] #Read in data from each sheet for each file; note that warnings will appear notifying user of gaps in data, the next line remedies that.
+    data_comp <- data_s[complete.cases(data_s), ] #Eliminates empty rows of data in each sheet
+    t1 <- as.POSIXct(strptime(data_comp$`Date-Time`, "%Y-%m-%d %H:%M:%S")) #Convert Date-Time to an actual date using posix and indicating the format of the date time stamp
+    t2 <- julian(t1, origin = "2015-01-01 00:00:00") #Convert Date-Time to a Julian date using the January 1, 2015 as the origin - this was the first year data were collected in this example
+    t3 <- t2/365.25 #Convert Julian dates to a fraction of a year
+    time_calc <- as.numeric(t3) #Create a vector of year fractions dates
+    data_comp$time_calc <- time_calc #Add vector of year fraction dates to sheet data frames
+    temp <- lm(TempC ~ sin(2*pi*time_calc) + cos(2*pi*time_calc),data=data_comp) #Use linear model function to estimate temperature based on the date-time yearly fraction using a fourier series
+    TempModel <- temp$fitted.values #Create a vector of the estimated values
+    data_comp$TempModel <- TempModel #Add the estimated values to the data frames. These are the modeled values based on time
+    test <- rbind(test, data_comp) #Bind all the sheets of a file together with the newly calculated model data
+    assign(paste0(file_name,"2"), test) #Assign the file name with a 2 to indicate files to which data have been added. Use assign to ensure there is output for each file
+    plot_list <-  (grep("\\w+\\.+\\w+2", ls(), value = TRUE)) #Create a list of files that the function will call on to plot
   }
 }
-
-
-cosine_plot <- function(file){
-  testplot <- print(ggplot(file, aes(x=file$'Date-Time', y=TempModel))+
-                      geom_line(col="red",lwd=0.5)+
-                      geom_point(aes(y=TempC), size=0.5)+
-                      ggtitle("Temperature Model")+
-                      theme(plot.title = element_text(hjust = 0.5))+
-                      labs(x="Year", y="Temp C"))
-  return(testplot)
+  
+  #Loop that calls in the ggplot function to plot the raw data and modeled results for each file.
+  
+for (file in plot_list){
+    cosine_plot(get(file)) #Calls in plot function, get ensures plots read from data frame
 }
 
 
-#Before moving forward, remove some unecessary stuff from the environment. These files were created in order to execute the loop but now they are unneeded.
-rm(data_comp, data_raw, data_s, temp, test)
-
-
-#source("ggplot_function.R")
-#cosine_plot(file_name)
+#Note that "34 warnings message", this is because there are gaps when reading in the inital sheets. This is remedied by line 26 in the loop.
 
